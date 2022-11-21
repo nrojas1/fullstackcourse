@@ -6,6 +6,8 @@ const Anecdote = ({anecdotes, which}) => anecdotes[which]
 
 const Title = ({ txt }) => <h1>{txt}</h1>
 
+const StatLine = ({ votes, selector }) => <p>has {votes[selector]} votes</p>
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -32,16 +34,12 @@ const App = () => {
     <div>
       <Title txt='Anecdote of the day'/>
       <Anecdote anecdotes={anecdotes} which={selected}/>
-      <br/>
-      {`has ${votes[selected]} votes`}
-      <br/>
+      <StatLine votes={votes} selector={selected}/>
       <Button event={()=>addVote(votes)} txt='vote'/>
       <Button event={()=>randomInt()} txt='next anecdote'/>
-      <br/>
       <Title txt='Anecdote with most votes'/>
       <Anecdote anecdotes={anecdotes} which={votes.indexOf(Math.max(...votes))}/>
-      <br/>
-      {`has ${votes[votes.indexOf(Math.max(...votes))]} votes`}
+      <StatLine votes={votes} selector={votes.indexOf(Math.max(...votes))}/>
     </div>
   )
 }
