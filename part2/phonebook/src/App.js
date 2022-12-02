@@ -1,5 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import axios from 'axios'
 
+// Sub components
 const Filter = ({ handleFilterChange }) => {
   return (
     <p>
@@ -46,18 +48,28 @@ const Persons = ({ persons, filterText}) => {
     </>
   )
 }
-
-
+// End sub components
+// ------------------
+// Main component
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number:'040-1234567', id:0 },
-    { name: 'Ada Lovelace', number: '39-44-5323523', id: 1 },
-    { name: 'Dan Abramov', number: '12-43-234345', id: 2 },
-    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 3 },
-  ]) 
+  const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterText, setFilterText] = useState('')
+
+  const hook = () => {
+    console.log('effect')
+    axios
+      .get('http://localhost:3001/persons')
+      .then(r => {
+        console.log('promise fulfiled')
+        setPersons(r.data);
+      }
+      )
+  }
+
+  useEffect(hook, [])
+  console.log('render', persons.length, 'persons');
 
   const handleNameChange = (e) => {
     // this stops <form> default behaviour

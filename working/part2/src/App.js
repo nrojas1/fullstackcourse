@@ -1,22 +1,27 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import axios from 'axios'
 import Note from "./components/Note"
 
-let notes;
-
-axios
-  .get('http://localhost:3001/notes')
-  .then(r => {
-    notes = r.data
-    console.log(this);
-  })
-
-console.log(notes);
-
-const App = (props) => {
-  const [notes, setNotes] = useState(props.notes)
-  const [newNote, setNewNote] = useState('a new note...')
+const App = () => {
+  const [notes, setNotes] = useState([])
+  const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(true)
+
+  const hook = () => {
+    console.log('effect')
+    axios
+      .get('http://localhost:3001/notes')
+      .then(r => {
+        console.log('promice fulfilled')
+        setNotes(r.data)
+      })
+  }
+
+  // useEffect is called once the render of return() is complete
+  // sencond argument === [] := only run after the first render of component (return())
+  useEffect( hook, [])
+
+  console.log('render', notes.length, 'notes')
 
   const addNote = (event) => {
     event.preventDefault()
